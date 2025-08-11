@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha's Book Shelf</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>📚 Alpha's Book Shelf</h1>
+        <p>Read my books online and get updates about upcoming releases.</p>
+    </header>
+
+    <!-- Available Books -->
+    <section id="books">
+        <h2>Available Books</h2>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for a book...">
+        </div>
+
+        <div class="book-container" id="book-list">
+            
+            <!-- BOOK TEMPLATE -->
+            <div class="book" data-id="1" data-title="Purpose, Plan & Achievement" data-file="books/The Road To Lasting Success by Oyebamiji Olamide Samuel.docx">
+                <img src="images/ChatGPT Image Aug 11, 2025, 09_02_58 PM.png" alt="Purpose, Plan & Achievement">
+                <h3>Purpose, Plan & Achievement</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p id="views-1" class="view-count">👁 0 reads</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+            <!-- Another book -->
+            <div class="book" data-id="2" data-title="The Road to Lasting Success" data-file="books/book2.pdf">
+                <img src="images/cover2.jpg" alt="The Road to Lasting Success">
+                <h3>The Road to Lasting Success</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p id="views-2" class="view-count">👁 0 reads</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Upcoming Books -->
+    <section id="upcoming-books">
+        <h2>🚀 Upcoming Books</h2>
+        <div class="book-container">
+            <div class="book upcoming">
+                <img src="images/upcoming1.jpg" alt="Secrets of a Winning Mindset">
+                <h3>Secrets of a Winning Mindset</h3>
+                <p class="release-date">Release Date: September 15, 2025</p>
+            </div>
+
+            <div class="book upcoming">
+                <img src="images/upcoming2.jpg" alt="Beyond the Horizon">
+                <h3>Beyond the Horizon</h3>
+                <p class="release-date">Release Date: December 1, 2025</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subscription -->
+    <section id="subscribe">
+        <h2>📢 Stay Updated</h2>
+        <form id="subscribeForm">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+        <p id="message"></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Alpha's Book Shelf</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
