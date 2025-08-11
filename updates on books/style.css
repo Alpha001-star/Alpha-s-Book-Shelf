@@ -1,0 +1,126 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #6c5ce7;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+h1 {
+    margin: 0;
+}
+
+h2 {
+    color: #6c5ce7;
+}
+
+.book-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 1rem;
+    justify-content: center;
+}
+
+.book {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    width: 250px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.book img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+button {
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background: #4a3cb4;
+}
+
+.search-bar {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.comment-section {
+    margin-top: 10px;
+}
+
+.comment-section input, 
+.comment-section textarea {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.comments-list {
+    list-style: none;
+    padding: 0;
+}
+
+.comments-list li {
+    background: #f8f8f8;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+#subscribe {
+    background: #ddd;
+    padding: 20px;
+    text-align: center;
+}
+
+#subscribe input {
+    padding: 10px;
+    width: 250px;
+    margin-right: 5px;
+}
+
+footer {
+    background: #6c5ce7;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+#upcoming-books {
+    margin-top: 30px;
+}
+
+.book.upcoming {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+}
+
+.release-date {
+    color: #856404;
+    font-weight: bold;
+}
