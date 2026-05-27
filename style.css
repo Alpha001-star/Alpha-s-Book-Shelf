@@ -1,0 +1,449 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8f9fc;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    text-align: center;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: white;
+    padding: 2rem 1rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.1rem;
+}
+
+/* Sections */
+section {
+    padding: 2rem 10%;
+}
+
+h2 {
+    color: #444;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.8rem;
+    position: relative;
+}
+
+h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #ff7e5f;
+    margin: 0.5rem auto;
+    border-radius: 5px;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.search-bar input:focus {
+    border-color: #ff7e5f;
+    box-shadow: 0 0 5px rgba(255,126,95,0.4);
+}
+
+/* Book Container */
+.book-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+}
+
+.book {
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.book img {
+    max-width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+}
+
+.book h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.book button {
+    background: #ff7e5f;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: 0.3s;
+}
+
+.book button:hover {
+    background: #e76b50;
+}
+
+.book:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+/* View Count */
+.view-count {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Comment Section */
+.comment-section {
+    margin-top: 1rem;
+    text-align: left;
+}
+
+.comment-section h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.comment-section input,
+.comment-section textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.4rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.comment-section input:focus,
+.comment-section textarea:focus {
+    border-color: #ff7e5f;
+}
+
+.comment-section button {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.comment-section button:hover {
+    background: #357ABD;
+}
+
+.comments-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+}
+
+.comments-list li {
+    background: #f4f6f8;
+    padding: 0.4rem 0.6rem;
+    border-radius: 5px;
+    margin-bottom: 0.3rem;
+    font-size: 0.85rem;
+}
+
+/* Upcoming Books */
+.upcoming {
+    opacity: 0.9;
+}
+
+.upcoming img {
+    filter: grayscale(30%);
+}
+
+/* Subscribe Form */
+#subscribe {
+    text-align: center;
+    background: linear-gradient(135deg, #4a90e2, #357ABD);
+    color: white;
+    padding: 2rem 1rem;
+    border-radius: 12px;
+    margin: 2rem 10%;
+}
+
+#subscribe input {
+    padding: 0.6rem 1rem;
+    width: 250px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    margin-right: 0.5rem;
+}
+
+#subscribe button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    border: none;
+    background: #ff7e5f;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#subscribe button:hover {
+    background: #e76b50;
+}
+
+#message {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+/* Footer */
+footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+/* Donation Section Styling */
+#support-author {
+    padding: 40px 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    margin: 40px auto;
+    max-width: 600px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.coffee-container h2 {
+    color: #ffdd00;
+    margin-bottom: 10px;
+}
+
+.coffee-container p {
+    color: #f5f5f5;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.coffee-btn {
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.coffee-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Scrollable comments panel limit adjustment */
+.comments-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-left: 0;
+    list-style: none;
+    text-align: left;
+}
+
+.comments-list li {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 8px 12px;
+    margin-top: 8px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #e0e0e0;
+}
+/* Custom Coffee Support Button */
+.custom-coffee-btn {
+    background-color: #00b971; /* OPay Green */
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 185, 113, 0.3);
+    transition: all 0.3s ease;
+}
+
+.custom-coffee-btn:hover {
+    background-color: #00965b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 185, 113, 0.4);
+}
+
+/* Modal Backdrop Settings */
+.modal-backdrop {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Premium OPay Virtual Card Design */
+.opay-card {
+    background: linear-gradient(135deg, #00b971 0%, #007d4c 100%);
+    width: 100%;
+    max-width: 360px;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+}
+
+.opay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.opay-logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -1px;
+}
+
+.chip {
+    width: 40px;
+    height: 30px;
+    background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+    border-radius: 6px;
+}
+
+.opay-body {
+    margin-bottom: 25px;
+}
+
+.opay-body .label {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.75;
+    margin: 12px 0 4px 0;
+}
+
+#accountNum {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    margin: 0;
+    font-weight: 700;
+}
+
+.account-name {
+    font-size: 1.1rem;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bank-name {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin: 10px 0 0 0;
+}
+
+/* Modal Actions Footer Layout */
+.opay-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.copy-btn {
+    flex: 2;
+    background-color: #ffffff;
+    color: #007d4c;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.copy-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.close-btn {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Success Alerts/Toast Notifications */
+.toast-message {
+    display: none;
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333333;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}

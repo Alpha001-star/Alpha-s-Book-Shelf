@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha's Book Shelf</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase JS Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header>
+        <h1>📚 Alpha's Book Shelf</h1>
+        <p>Read my books online and get updates about upcoming releases.</p>
+    </header>
+
+    <!-- Available Books -->
+    <section id="books">
+        <h2>Available Books</h2>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for a book...">
+        </div>
+
+        <div class="book-container" id="book-list">
+            
+            <div class="book" data-id="1" data-title="Purpose, Plan & Achievement" data-file="books\The Road To Lasting Success by Oyebamiji Olamide Samuel.pdf">
+                <img src="images/purpose plan and achievement.png" alt="Purpose, Plan & Achievement">
+                <h3>Purpose, Plan & Achievement</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p class="view-count">👁 Loading reads...</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+            <div class="book" data-id="2" data-title="The Four C's" data-file="books/The four C's by Oyebamiji Olamide Samuel.pdf">
+                <img src="images/the four C's.png" alt="The four C's">
+                <h3>The Four C's</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p class="view-count">👁 Loading reads...</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+            <div class="book" data-id="3" data-title="C:Building up your potentials" data-file="books/Building up your potentials by Oyebamiji Olamide Samuel.Pdf">
+                <img src="images/building up your potentials.png" alt="C:Building up your potentials">
+                <h3>Building up your potentials</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p class="view-count">👁 Loading reads...</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+            <div class="book" data-id="4" data-title="Beyond the horizon" data-file="books/Beyond the horizon by oyebamiji olamide samuel.Pdf">
+                <img src="images/beyond the horizon.png" alt="Beyond the horizon">
+                <h3>Beyond the horizon</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p class="view-count">👁 Loading reads...</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+            <div class="book" data-id="5" data-title="Never you say why me" data-file="books/never you say why me by oyebamiji olamide samuel.Pdf">
+                <img src="images/never you say why me.png" alt="Never you say why me">
+                <h3>Never you say why me</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p class="view-count">👁 Loading reads...</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+            <div class="book" data-id="6" data-title="Secrets of a winning mindset" data-file="books/secrets of a winning mindset by oyebamiji olamide samuel.Pdf">
+                <img src="images/secrets of winning a mindset.png" alt="Secrets of a winning mindset">
+                <h3>Secrets of a winning mindset</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p class="view-count">👁 Loading reads...</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+
+            <div class="book" data-id="7" data-title="Thinking outside the box" data-file="books/thinking outside the box by oyebaniji olamide samuel.Pdf">
+                <img src="images/thinking outside the box.png" alt="Thinking outside the box">
+                <h3>Thinking outside the box</h3>
+                <button onclick="readBook(this)">📖 Read Now</button>
+                <p class="view-count">👁 Loading reads...</p>
+
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <input type="text" class="name-input" placeholder="Your name">
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment(this)">💬 Post Comment</button>
+                    <ul class="comments-list"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Books -->
+    <section id="upcoming-books">
+        <h2>🚀 Upcoming Books</h2>
+        <div class="book-container">
+            <div class="book upcoming">
+                <img src="images/upcoming1.jpg" alt="Secrets of a Winning Mindset">
+                <h3>Chasing progress not perfection</h3>
+                <p class="release-date">Release Date: September 15, 2026</p>
+            </div>
+            <div class="book upcoming">
+                <img src="images/upcoming2.jpg" alt="Beyond the Horizon">
+                <h3>Believing in yourself when no one else does </h3>
+                <p class="release-date">Release Date: October 6 , 2026</p>
+            </div>
+            <div class="book upcoming">
+                <img src="images/upcoming2.jpg" alt="Beyond the Horizon">
+                <h3>How to keep going when life gets tough</h3>
+                <p class="release-date">Release Date: November 11, 2026</p>
+            </div>
+            <div class="book upcoming">
+                <img src="images/upcoming2.jpg" alt="Beyond the Horizon">
+                <h3>The courage to start again after failure</h3>
+                <p class="release-date">Release Date: December 24, 2026</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section id="support-author">
+        <div class="coffee-container">
+            <h2>☕ Enjoying My Work?</h2>
+            <p>If my books have inspired you, consider supporting my journey as an author!</p>
+            <!-- Custom Button that opens the OPay Modal -->
+            <button class="custom-coffee-btn" onclick="openCoffeeModal()">
+                <span class="btn-icon">☕</span> Support Author (OPay)
+            </button>
+        </div>
+    </section>
+
+    <!-- OPay Donation Modal Backdrop -->
+    <div id="coffeeModal" class="modal-backdrop" onclick="closeCoffeeModal(event)">
+        <!-- The OPay Card UI Container -->
+        <div class="opay-card" onclick="event.stopPropagation()">
+            <div class="opay-header">
+                <span class="opay-logo">OPay</span>
+                <span class="chip"></span>
+            </div>
+            
+            <div class="opay-body">
+                <p class="label">ACCOUNT NUMBER</p>
+                <!-- REPLACE WITH YOUR ACTUAL OPAY ACCOUNT NUMBER -->
+                <h3 id="accountNum">8055695511</h3> 
+                
+                <p class="label">ACCOUNT NAME</p>
+                <!-- REPLACE WITH YOUR ACTUAL NAME -->
+                <h4 class="account-name">Oyebamiji Olamide Samuel</h4>
+                
+                <p class="bank-name">OPay Digital Services Limited</p>
+            </div>
+            
+            <div class="opay-footer">
+                <button class="copy-btn" onclick="copyAccountNumber()">📋 Copy Number</button>
+                <button class="close-btn" onclick="document.getElementById('coffeeModal').style.display='none'">Close</button>
+            </div>
+            <p id="copyToast" class="toast-message">Account number copied!</p>
+        </div>
+    </div>
+
+    <!-- Subscription -->
+<section id="subscribe">
+    <h2>📢 Stay Updated</h2>
+    <!-- Cleaned up: Only ONE form tag, using your Formspree ID -->
+    <form id="subscribeForm" action="https://formspree.io/f/mkooqeqb" method="POST">
+        <!-- Added a name="email" attribute so Formspree knows what data this is -->
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <button type="submit">Subscribe</button>
+    </form>
+    <p id="message"></p>
+</section>
+
+    <footer>
+        <p>&copy; 2025 Alpha's Book Shelf</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
