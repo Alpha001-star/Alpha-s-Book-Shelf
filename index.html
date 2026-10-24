@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17251f">
+    <meta name="description" content="Read books by Oyebamiji Olamide Samuel and keep up with upcoming releases.">
+    <title>Alpha's Book Shelf</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #17251f;
+            --muted: #66736b;
+            --paper: #f7f5ef;
+            --card: #fffefa;
+            --green: #25664c;
+            --green-dark: #174a36;
+            --gold: #d9a84e;
+            --line: #e7e4da;
+            --shadow: 0 16px 40px rgba(23, 37, 31, .09);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+        }
+        button, input, textarea { font: inherit; }
+        button { cursor: pointer; }
+        a { color: inherit; }
+        .site-header {
+            position: relative;
+            overflow: hidden;
+            padding: 4.5rem 1.25rem 4rem;
+            background:
+                radial-gradient(ellipse at 80% 0%, rgba(217, 168, 78, .2), transparent 36%),
+                linear-gradient(135deg, #17251f, #234936);
+            color: #fffefa;
+            text-align: center;
+        }
+        .site-header::after {
+            position: absolute;
+            right: -6rem;
+            bottom: -11rem;
+            width: 26rem;
+            height: 26rem;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 50%;
+            content: "";
+        }
+        .eyebrow {
+            margin: 0 0 .65rem;
+            color: #e7c77f;
+            font-size: .76rem;
+            font-weight: 800;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+        }
+        .site-header h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2.5rem, 7vw, 4.8rem);
+            font-weight: 500;
+            letter-spacing: -.045em;
+            line-height: 1.08;
+        }
+        .site-header .intro {
+            position: relative;
+            z-index: 1;
+            max-width: 38rem;
+            margin: 1rem auto 0;
+            color: rgba(255, 254, 250, .78);
+            font-size: 1.05rem;
+        }
+        .header-link {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            margin-top: 1.6rem;
+            padding: .75rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, .35);
+            border-radius: 999px;
+            color: #fffefa;
+            font-size: .9rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background .2s ease, border-color .2s ease;
+        }
+        .header-link:hover { border-color: var(--gold); background: rgba(255,255,255,.08); }
+        main { width: min(1160px, calc(100% - 2.5rem)); margin: 0 auto; }
+        section { padding: 4rem 0; }
+        .section-heading { margin: 0 0 .5rem; text-align: center; }
+        .section-heading h2 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 500;
+            letter-spacing: -.035em;
+        }
+        .section-heading p { margin: .55rem 0 0; color: var(--muted); }
+        .search-bar { max-width: 30rem; margin: 2rem auto 2.25rem; }
+        .search-bar input, .comment-section input, .comment-section textarea, #subscribe input {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: .75rem;
+            background: #fff;
+            color: var(--ink);
+            outline: none;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        .search-bar input { padding: .85rem 1rem; }
+        .search-bar input:focus, .comment-section input:focus, .comment-section textarea:focus, #subscribe input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(37, 102, 76, .12);
+        }
+        .book-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+            gap: 1.25rem;
+        }
+        .book {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            padding: 1rem;
+            border: 1px solid rgba(23, 37, 31, .06);
+            border-radius: 1rem;
+            background: var(--card);
+            box-shadow: 0 5px 20px rgba(23, 37, 31, .045);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .book[hidden] { display: none; }
+        .book:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+        .book-cover {
+            display: block;
+            width: 100%;
+            height: 260px;
+            border-radius: .65rem;
+            background: #ece9df;
+            object-fit: cover;
+            object-position: center;
+        }
+        .book h3 { margin: 1rem 0 .65rem; font-family: Georgia, "Times New Roman", serif; font-size: 1.35rem; line-height: 1.25; }
+        .primary-button, .secondary-button, .custom-coffee-btn, .copy-btn, .close-btn, #subscribe button {
+            border: 0;
+            border-radius: 999px;
+            font-weight: 750;
+            transition: background .2s ease, transform .2s ease;
+        }
+        .primary-button {
+            align-self: flex-start;
+            padding: .65rem 1rem;
+            background: var(--green);
+            color: #fff;
+        }
+        .primary-button:hover, .secondary-button:hover, #subscribe button:hover { background: var(--green-dark); transform: translateY(-1px); }
+        .view-count { margin: .65rem 0 0; color: var(--muted); font-size: .84rem; }
+        .comment-section { margin-top: 1.15rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+        .comment-section h4 { margin: 0 0 .6rem; font-size: .95rem; }
+        .comment-section input, .comment-section textarea { margin-bottom: .5rem; padding: .65rem .75rem; font-size: .88rem; }
+        .comment-section textarea { min-height: 5rem; resize: vertical; }
+        .secondary-button { padding: .58rem .9rem; background: #e9f1eb; color: var(--green-dark); font-size: .84rem; }
+        .comments-list { max-height: 180px; overflow-y: auto; margin: .75rem 0 0; padding: 0; list-style: none; }
+        .comments-list li { margin-top: .45rem; padding: .6rem .7rem; border-radius: .6rem; background: #f2f3ed; overflow-wrap: anywhere; font-size: .84rem; }
+        .comments-list small { color: var(--muted); }
+        .empty-state { grid-column: 1 / -1; padding: 2rem; color: var(--muted); text-align: center; }
+        #upcoming-books { border-top: 1px solid var(--line); }
+        .upcoming .book-cover { filter: saturate(.86); }
+        .release-date { margin: auto 0 0; color: var(--muted); font-size: .9rem; }
+        #support-author {
+            margin: 1rem 0 4rem;
+            padding: 3rem 1.5rem;
+            border-radius: 1.25rem;
+            background: #e9eee5;
+            text-align: center;
+        }
+        #support-author h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 2rem; font-weight: 500; }
+        #support-author p { margin: .6rem auto 1.3rem; color: var(--muted); }
+        .custom-coffee-btn { padding: .8rem 1.25rem; background: #00a96b; color: white; }
+        .custom-coffee-btn:hover { background: #008b58; transform: translateY(-1px); }
+        #subscribe {
+            margin: 0 0 4rem;
+            padding: 2.5rem 1.5rem;
+            border-radius: 1.25rem;
+            background: var(--ink);
+            color: #fffefa;
+            text-align: center;
+        }
+        #subscribe h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 2rem; font-weight: 500; }
+        #subscribe > p { color: rgba(255,255,255,.72); }
+        #subscribeForm { display: flex; max-width: 34rem; gap: .6rem; margin: 1.25rem auto 0; }
+        #subscribe input { min-width: 0; padding: .8rem 1rem; }
+        #subscribe button { padding: .75rem 1.15rem; background: var(--gold); color: var(--ink); white-space: nowrap; }
+        #subscribe button:hover { background: #efc66d; }
+        #message { min-height: 1.5em; margin-bottom: 0; }
+        footer { padding: 1.25rem; background: #111b17; color: rgba(255,255,255,.7); text-align: center; font-size: .85rem; }
+        .modal-backdrop {
+            position: fixed;
+            z-index: 10;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(9, 20, 15, .72);
+        }
+        .modal-backdrop.is-open { display: flex; }
+        .opay-card {
+            position: relative;
+            width: min(100%, 380px);
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, #00a96b, #126342);
+            box-shadow: 0 24px 70px rgba(0,0,0,.3);
+            color: white;
+        }
+        .opay-header, .opay-footer { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+        .opay-header { margin-bottom: 1.5rem; }
+        .opay-logo { font-size: 1.65rem; font-weight: 850; font-style: italic; }
+        .chip { width: 2.5rem; height: 1.8rem; border-radius: .35rem; background: linear-gradient(135deg, #ffe39a, #c18a26); }
+        .label { margin: .9rem 0 .2rem; opacity: .76; font-size: .7rem; letter-spacing: .15em; }
+        #accountNum { margin: 0; font-size: 1.6rem; letter-spacing: .08em; }
+        .account-name { margin: 0; font-size: 1rem; text-transform: uppercase; }
+        .bank-name { margin: .6rem 0 1.4rem; opacity: .78; font-size: .82rem; }
+        .copy-btn, .close-btn { flex: 1; padding: .7rem; }
+        .copy-btn { background: white; color: var(--green-dark); }
+        .close-btn { background: rgba(255,255,255,.2); color: white; }
+        .copy-btn:hover, .close-btn:hover { filter: brightness(.94); }
+        .toast-message { min-height: 1.2em; margin: .8rem 0 0; text-align: center; font-size: .85rem; }
+        :focus-visible { outline: 3px solid #dfb34e; outline-offset: 3px; }
+
+        @media (max-width: 560px) {
+            .site-header { padding: 3.5rem 1rem; }
+            main { width: min(100% - 1.5rem, 1160px); }
+            section { padding: 3rem 0; }
+            .book-container { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+            .book-cover { height: 230px; }
+            #subscribeForm { flex-direction: column; }
+            #subscribe button { width: 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <p class="eyebrow">Stories, ideas & inspiration</p>
+        <h1>Alpha's Book Shelf</h1>
+        <p class="intro">Read books by Oyebamiji Olamide Samuel and discover ideas to help you grow, find purpose, and keep moving forward.</p>
+        <a class="header-link" href="#books">Explore the bookshelf</a>
+    </header>
+
+    <main>
+        <section id="books" aria-labelledby="books-heading">
+            <div class="section-heading">
+                <h2 id="books-heading">The bookshelf</h2>
+                <p>Choose a book and start reading.</p>
+            </div>
+            <div class="search-bar">
+                <input type="search" id="searchInput" placeholder="Search books by title..." aria-label="Search books by title">
+            </div>
+            <div class="book-container" id="book-list">
+                <article class="book" data-id="1" data-title="Purpose, Plan & Achievement" data-file="books/The Road To Lasting Success by Oyebamiji Olamide Samuel.pdf">
+                    <img class="book-cover" src="images/purpose plan and achievement.png" alt="Purpose, Plan & Achievement book cover">
+                    <h3>Purpose, Plan &amp; Achievement</h3>
+                    <button class="primary-button" type="button" data-action="read">Read now</button>
+                    <p class="view-count" aria-live="polite">Loading reads...</p>
+                    <div class="comment-section">
+                        <h4>Join the conversation</h4>
+                        <input class="name-input" type="text" maxlength="60" placeholder="Your name (optional)" aria-label="Your name">
+                        <textarea class="comment-input" maxlength="1000" placeholder="Write a comment..." aria-label="Write a comment"></textarea>
+                        <button class="secondary-button" type="button" data-action="comment">Post comment</button>
+                        <ul class="comments-list" aria-label="Comments"></ul>
+                    </div>
+                </article>
+                <article class="book" data-id="2" data-title="The Four C's" data-file="books/The four C's by Oyebamiji Olamide Samuel.pdf">
+                    <img class="book-cover" src="images/the four C's.png" alt="The Four C's book cover">
+                    <h3>The Four C's</h3>
+                    <button class="primary-button" type="button" data-action="read">Read now</button>
+                    <p class="view-count" aria-live="polite">Loading reads...</p>
+                    <div class="comment-section">
+                        <h4>Join the conversation</h4>
+                        <input class="name-input" type="text" maxlength="60" placeholder="Your name (optional)" aria-label="Your name">
+                        <textarea class="comment-input" maxlength="1000" placeholder="Write a comment..." aria-label="Write a comment"></textarea>
+                        <button class="secondary-button" type="button" data-action="comment">Post comment</button>
+                        <ul class="comments-list" aria-label="Comments"></ul>
+                    </div>
+                </article>
+                <article class="book" data-id="3" data-title="Building up your potentials" data-file="books/Building up your potentials by Oyebamiji Olamide Samuel.pdf">
+                    <img class="book-cover" src="images/building up your potentials.png" alt="Building up your potentials book cover">
+                    <h3>Building Up Your Potentials</h3>
+                    <button class="primary-button" type="button" data-action="read">Read now</button>
+                    <p class="view-count" aria-live="polite">Loading reads...</p>
+                    <div class="comment-section">
+                        <h4>Join the conversation</h4>
+                        <input class="name-input" type="text" maxlength="60" placeholder="Your name (optional)" aria-label="Your name">
+                        <textarea class="comment-input" maxlength="1000" placeholder="Write a comment..." aria-label="Write a comment"></textarea>
+                        <button class="secondary-button" type="button" data-action="comment">Post comment</button>
+                        <ul class="comments-list" aria-label="Comments"></ul>
+                    </div>
+                </article>
+                <article class="book" data-id="4" data-title="Beyond the Horizon" data-file="books/Beyond the horizon by oyebamiji olamide samuel.pdf">
+                    <img class="book-cover" src="images/beyond the horizon.png" alt="Beyond the Horizon book cover">
+                    <h3>Beyond the Horizon</h3>
+                    <button class="primary-button" type="button" data-action="read">Read now</button>
+                    <p class="view-count" aria-live="polite">Loading reads...</p>
+                    <div class="comment-section">
+                        <h4>Join the conversation</h4>
+                        <input class="name-input" type="text" maxlength="60" placeholder="Your name (optional)" aria-label="Your name">
+                        <textarea class="comment-input" maxlength="1000" placeholder="Write a comment..." aria-label="Write a comment"></textarea>
+                        <button class="secondary-button" type="button" data-action="comment">Post comment</button>
+                        <ul class="comments-list" aria-label="Comments"></ul>
+                    </div>
+                </article>
+                <article class="book" data-id="5" data-title="Never You Say Why Me" data-file="books/never you say why me by oyebamiji olamide samuel.pdf">
+                    <img class="book-cover" src="images/never you say why me.png" alt="Never You Say Why Me book cover">
+                    <h3>Never You Say Why Me</h3>
+                    <button class="primary-button" type="button" data-action="read">Read now</button>
+                    <p class="view-count" aria-live="polite">Loading reads...</p>
+                    <div class="comment-section">
+                        <h4>Join the conversation</h4>
+                        <input class="name-input" type="text" maxlength="60" placeholder="Your name (optional)" aria-label="Your name">
+                        <textarea class="comment-input" maxlength="1000" placeholder="Write a comment..." aria-label="Write a comment"></textarea>
+                        <button class="secondary-button" type="button" data-action="comment">Post comment</button>
+                        <ul class="comments-list" aria-label="Comments"></ul>
+                    </div>
+                </article>
+                <article class="book" data-id="6" data-title="Secrets of a Winning Mindset" data-file="books/secrets of a winning mindset by oyebamiji olamide samuel.pdf">
+                    <img class="book-cover" src="images/secrets of winning a mindset.png" alt="Secrets of a Winning Mindset book cover">
+                    <h3>Secrets of a Winning Mindset</h3>
+                    <button class="primary-button" type="button" data-action="read">Read now</button>
+                    <p class="view-count" aria-live="polite">Loading reads...</p>
+                    <div class="comment-section">
+                        <h4>Join the conversation</h4>
+                        <input class="name-input" type="text" maxlength="60" placeholder="Your name (optional)" aria-label="Your name">
+                        <textarea class="comment-input" maxlength="1000" placeholder="Write a comment..." aria-label="Write a comment"></textarea>
+                        <button class="secondary-button" type="button" data-action="comment">Post comment</button>
+                        <ul class="comments-list" aria-label="Comments"></ul>
+                    </div>
+                </article>
+                <article class="book" data-id="7" data-title="Thinking Outside the Box" data-file="books/thinking outside the box by oyebaniji olamide samuel.pdf">
+                    <img class="book-cover" src="images/thinking outside the box.png" alt="Thinking Outside the Box book cover">
+                    <h3>Thinking Outside the Box</h3>
+                    <button class="primary-button" type="button" data-action="read">Read now</button>
+                    <p class="view-count" aria-live="polite">Loading reads...</p>
+                    <div class="comment-section">
+                        <h4>Join the conversation</h4>
+                        <input class="name-input" type="text" maxlength="60" placeholder="Your name (optional)" aria-label="Your name">
+                        <textarea class="comment-input" maxlength="1000" placeholder="Write a comment..." aria-label="Write a comment"></textarea>
+                        <button class="secondary-button" type="button" data-action="comment">Post comment</button>
+                        <ul class="comments-list" aria-label="Comments"></ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="upcoming-books" aria-labelledby="upcoming-heading">
+            <div class="section-heading">
+                <h2 id="upcoming-heading">Coming soon</h2>
+                <p>More ideas and encouragement are on the way.</p>
+            </div>
+            <div class="book-container">
+                <article class="book upcoming">
+                    <img class="book-cover" src="images/secrets of winning a mindset.png" alt="A preview cover for Chasing Progress, Not Perfection">
+                    <h3>Chasing Progress, Not Perfection</h3>
+                    <p class="release-date">Expected September 15, 2026</p>
+                </article>
+                <article class="book upcoming">
+                    <img class="book-cover" src="images/beyond the horizon.png" alt="A preview cover for Believing in Yourself">
+                    <h3>Believing in Yourself When No One Else Does</h3>
+                    <p class="release-date">Expected October 6, 2026</p>
+                </article>
+                <article class="book upcoming">
+                    <img class="book-cover" src="images/building up your potentials.png" alt="A preview cover for How to Keep Going">
+                    <h3>How to Keep Going When Life Gets Tough</h3>
+                    <p class="release-date">Expected November 11, 2026</p>
+                </article>
+                <article class="book upcoming">
+                    <img class="book-cover" src="images/purpose plan and achievement.png" alt="A preview cover for The Courage to Start Again">
+                    <h3>The Courage to Start Again After Failure</h3>
+                    <p class="release-date">Expected December 24, 2026</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="support-author">
+            <h2>Enjoying the books?</h2>
+            <p>If these stories have inspired you, you can support the author's work.</p>
+            <button class="custom-coffee-btn" type="button" data-action="open-support">☕ Support the author</button>
+        </section>
+
+        <section id="subscribe" aria-labelledby="subscribe-heading">
+            <h2 id="subscribe-heading">Stay in the loop</h2>
+            <p>Get updates about new books and upcoming releases.</p>
+            <form id="subscribeForm" action="https://formspree.io/f/mkooqeqb" method="POST">
+                <input type="email" name="email" placeholder="Your email address" aria-label="Your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+            <p id="message" role="status"></p>
+        </section>
+    </main>
+
+    <div id="coffeeModal" class="modal-backdrop" aria-hidden="true">
+        <div class="opay-card" role="dialog" aria-modal="true" aria-labelledby="support-title">
+            <div class="opay-header">
+                <span class="opay-logo" id="support-title">OPay</span>
+                <span class="chip" aria-hidden="true"></span>
+            </div>
+            <p class="label">ACCOUNT NUMBER</p>
+            <h3 id="accountNum">8055695511</h3>
+            <p class="label">ACCOUNT NAME</p>
+            <h4 class="account-name">Oyebamiji Olamide Samuel</h4>
+            <p class="bank-name">OPay Digital Services Limited</p>
+            <div class="opay-footer">
+                <button class="copy-btn" type="button" data-action="copy-account">Copy number</button>
+                <button class="close-btn" type="button" data-action="close-support">Close</button>
+            </div>
+            <p id="copyToast" class="toast-message" role="status" aria-live="polite"></p>
+        </div>
+    </div>
+
+    <footer><p>&copy; <span id="year"></span> Alpha's Book Shelf</p></footer>
+
+    <script>
+        const SUPABASE_URL = 'https://rwqsytnswpmqgvmyibho.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_XybSW9WI8RSPd4zNercQ8g_hO1mXVkn';
+        const supabaseClient = window.supabase
+            ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+            : null;
+
+        async function readBook(book) {
+            const file = book.dataset.file;
+            window.open(file, '_blank', 'noopener');
+
+            if (!supabaseClient) return;
+            try {
+                const { error } = await supabaseClient.rpc('increment_views', { row_id: book.dataset.id });
+                if (error) {
+                    const { data: viewData, error: selectError } = await supabaseClient
+                        .from('book_views').select('count').eq('book_id', book.dataset.id).maybeSingle();
+                    if (selectError) throw selectError;
+                    const { error: upsertError } = await supabaseClient.from('book_views').upsert({
+                        book_id: book.dataset.id,
+                        count: (viewData?.count || 0) + 1
+                    });
+                    if (upsertError) throw upsertError;
+                }
+                await loadViews();
+            } catch (error) {
+                console.error('Could not update the book read count:', error);
+            }
+        }
+
+        async function addComment(book) {
+            const nameInput = book.querySelector('.name-input');
+            const commentInput = book.querySelector('.comment-input');
+            const text = commentInput.value.trim();
+            if (!text) {
+                commentInput.focus();
+                return;
+            }
+            if (!supabaseClient) {
+                window.alert('Comments are temporarily unavailable. Please try again later.');
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient.from('book_comments').insert([{
+                    book_id: book.dataset.id,
+                    name: nameInput.value.trim() || 'Anonymous',
+                    comment_text: text
+                }]);
+                if (error) throw error;
+                nameInput.value = '';
+                commentInput.value = '';
+                await loadCommentsForBook(book);
+            } catch (error) {
+                console.error('Could not save the comment:', error);
+                window.alert('Your comment could not be saved. Please try again.');
+            }
+        }
+
+        async function loadViews() {
+            if (!supabaseClient) {
+                document.querySelectorAll('.view-count').forEach((item) => {
+                    item.textContent = 'Read count unavailable';
+                });
+                return;
+            }
+            try {
+                const { data: views, error } = await supabaseClient.from('book_views').select('book_id, count');
+                if (error) throw error;
+                const viewMap = new Map(views.map((view) => [String(view.book_id), view.count]));
+                document.querySelectorAll('#book-list .book').forEach((book) => {
+                    const count = viewMap.get(book.dataset.id) || 0;
+                    book.querySelector('.view-count').textContent = `👁 ${count} ${count === 1 ? 'read' : 'reads'}`;
+                });
+            } catch (error) {
+                console.error('Could not load book read counts:', error);
+                document.querySelectorAll('.view-count').forEach((item) => {
+                    item.textContent = 'Read count unavailable';
+                });
+            }
+        }
+
+        async function loadCommentsForBook(book) {
+            const list = book.querySelector('.comments-list');
+            if (!supabaseClient) {
+                list.innerHTML = '<li>Comments are currently unavailable.</li>';
+                return;
+            }
+            try {
+                const { data: comments, error } = await supabaseClient
+                    .from('book_comments')
+                    .select('name, comment_text, created_at')
+                    .eq('book_id', book.dataset.id)
+                    .order('created_at', { ascending: true });
+                if (error) throw error;
+
+                list.replaceChildren();
+                comments.forEach((comment) => {
+                    const item = document.createElement('li');
+                    const author = document.createElement('strong');
+                    const date = document.createElement('small');
+                    const text = document.createElement('p');
+                    author.textContent = comment.name || 'Anonymous';
+                    date.textContent = ` (${new Date(comment.created_at).toLocaleString()})`;
+                    text.textContent = comment.comment_text;
+                    text.style.margin = '.25rem 0 0';
+                    item.append(author, date, text);
+                    list.appendChild(item);
+                });
+                if (!comments.length) {
+                    const item = document.createElement('li');
+                    item.textContent = 'Be the first to leave a comment.';
+                    list.appendChild(item);
+                }
+            } catch (error) {
+                console.error('Could not load comments:', error);
+                list.innerHTML = '<li>Comments could not be loaded.</li>';
+            }
+        }
+
+        function setSupportModal(isOpen) {
+            const modal = document.getElementById('coffeeModal');
+            modal.classList.toggle('is-open', isOpen);
+            modal.setAttribute('aria-hidden', String(!isOpen));
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+            if (isOpen) modal.querySelector('[data-action="copy-account"]').focus();
+        }
+
+        async function copyAccountNumber() {
+            const accountNumber = document.getElementById('accountNum').textContent.trim();
+            const toast = document.getElementById('copyToast');
+            try {
+                await navigator.clipboard.writeText(accountNumber);
+                toast.textContent = 'Account number copied.';
+            } catch (error) {
+                console.error('Could not copy the account number:', error);
+                toast.textContent = `Copy failed. Account number: ${accountNumber}`;
+            }
+        }
+
+        document.getElementById('book-list').addEventListener('click', (event) => {
+            const button = event.target.closest('button[data-action]');
+            if (!button) return;
+            const book = button.closest('.book');
+            if (button.dataset.action === 'read') readBook(book);
+            if (button.dataset.action === 'comment') addComment(book);
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (event) => {
+            const query = event.target.value.trim().toLocaleLowerCase();
+            let visibleBooks = 0;
+            document.querySelectorAll('#book-list .book').forEach((book) => {
+                const matches = book.dataset.title.toLocaleLowerCase().includes(query);
+                book.hidden = !matches;
+                if (matches) visibleBooks += 1;
+            });
+            let emptyState = document.querySelector('.empty-state');
+            if (!visibleBooks && !emptyState) {
+                emptyState = document.createElement('p');
+                emptyState.className = 'empty-state';
+                emptyState.textContent = 'No books match your search.';
+                document.getElementById('book-list').appendChild(emptyState);
+            } else if (visibleBooks && emptyState) {
+                emptyState.remove();
+            }
+        });
+
+        document.querySelector('[data-action="open-support"]').addEventListener('click', () => setSupportModal(true));
+        document.querySelector('[data-action="close-support"]').addEventListener('click', () => setSupportModal(false));
+        document.querySelector('[data-action="copy-account"]').addEventListener('click', copyAccountNumber);
+        document.getElementById('coffeeModal').addEventListener('click', (event) => {
+            if (event.target.id === 'coffeeModal') setSupportModal(false);
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && document.getElementById('coffeeModal').classList.contains('is-open')) {
+                setSupportModal(false);
+            }
+        });
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        loadViews();
+        document.querySelectorAll('#book-list .book').forEach(loadCommentsForBook);
+    </script>
+</body>
+</html>
